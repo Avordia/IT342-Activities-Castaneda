@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Contacts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Google Contacts</h1>
+        <div class="contacts-list">
+            <div class="contact-card" th:each="contact : ${contacts}">
+                <h2 th:text="${contact.names[0].displayName}">Contact Name</h2>
+                <p th:if="${contact.emailAddresses}">
+                    <strong>Email:</strong> 
+                    <span th:text="${contact.emailAddresses[0].value}">email@example.com</span>
+                </p>
+                <p th:if="${contact.phoneNumbers}">
+                    <strong>Phone:</strong> 
+                    <span th:text="${contact.phoneNumbers[0].value}">+1234567890</span>
+                </p>
+                <div class="actions">
+                    <a th:href="@{/contacts/update/{resourceName}(resourceName=${contact.resourceName})}">Edit</a>
+                    <a th:href="@{/contacts/delete/{resourceName}(resourceName=${contact.resourceName})}">Delete</a>
+                </div>
+            </div>
+        </div>
+
+        <h2>Add New Contact</h2>
+        <form th:action="@{/contacts/create}" method="post">
+            <input type="text" name="names[0].givenName" placeholder="First Name" required>
+            <input type="text" name="names[0].familyName" placeholder="Last Name" required>
+            <input type="email" name="emailAddresses[0].value" placeholder="Email" required>
+            <input type="tel" name="phoneNumbers[0].value" placeholder="Phone Number" required>
+            <button type="submit">Add Contact</button>
+        </form>
+    </div>
+</body>
+</html>

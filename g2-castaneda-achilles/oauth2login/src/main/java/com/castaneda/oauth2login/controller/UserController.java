@@ -26,9 +26,8 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
-        // Perform logout
         new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-        return "redirect:/login"; // Redirect to the login page after logout
+        return "redirect:/login"; 
     }
 
 

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Info</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div>
+        <h1>User Information</h1>
+        <div th:if="${user}">
+            <p>Name: <span th:text="${user.name}"></span></p>
+            <p>Email: <span th:text="${user.email}"></span></p>
+            <!-- Add more fields based on your OAuth2 provider -->
+        </div>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/logout}">Log Out</a>
+    </div>
+</body>
+</html>

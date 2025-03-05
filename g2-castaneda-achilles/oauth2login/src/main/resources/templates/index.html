@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div>
+        <h1>Welcome!</h1>
+        <p>This is the landing page.</p>
+        <button onclick="window.location.href='https://www.youtube.com/shorts/t7e0yoRUxq8'">Click Me! (^-^) <333</button>
+        <button th:onclick="'window.location.href=\'' + @{/user-info} + '\''">User Info</button>
+        <button th:onclick="'window.location.href=\'' + @{/logout} + '\''">Log Out</button>
+    </div>
+</body>
+</html>

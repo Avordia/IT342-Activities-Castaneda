@@ -13,10 +13,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain defaultSecurity(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(oauth -> oauth.anyRequest().authenticated())
-                .oauth2Login(oauth2login -> oauth2login.defaultSuccessUrl("/user-info", true))
-                .formLogin(formlogin -> formlogin.defaultSuccessUrl("/secured", true))
-                .logout(logout -> logout.logoutSuccessUrl("/"))
+                .authorizeHttpRequests(oauth -> oauth
+                        .requestMatchers("/", "/css/**", "/js/**").permitAll() // Allow access to static resources
+                        .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2login -> oauth2login
+                        .defaultSuccessUrl("/secured", true)
+                )
+                .formLogin(formlogin -> formlogin
+                        .defaultSuccessUrl("/secured", true)
+                )
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/")
+                )
                 .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }

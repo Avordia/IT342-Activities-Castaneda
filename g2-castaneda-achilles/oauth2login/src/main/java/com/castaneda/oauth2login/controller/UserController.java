@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class UserController {
 
-    @GetMapping("/")
+    @GetMapping("/home")
     public String index() {
         return "index";
     }

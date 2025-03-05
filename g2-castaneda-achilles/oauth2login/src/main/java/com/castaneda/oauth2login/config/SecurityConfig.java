@@ -18,10 +18,10 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2login -> oauth2login
-                        .defaultSuccessUrl("/secured", true)
+                        .defaultSuccessUrl("/home", true)
                 )
                 .formLogin(formlogin -> formlogin
-                        .defaultSuccessUrl("/secured", true)
+                        .defaultSuccessUrl("/home", true)
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")

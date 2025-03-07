@@ -3,51 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign in - Google Accounts</title>
+    <title>TypeBeat</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+    <header>
+        <nav>
+            <div class="nav">
+                <div class="nav-menu">
+                    <ul>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
     <div class="container">
-        <div class="header">
-            <div class="google-logo">G</div>
-            <h1>Sign in</h1>
-            <p>Use your Google Account</p>
+        <div class="heroTitle">
+            <img src="/images/heroLogo.png" alt="Hero Logo">
+            <h1>SIGN IN</h1>
         </div>
-
-        <form class="login-form" th:action="@{/login}" method="post">
-            <div class="input-container">
-                <input type="text" id="username" name="username" required>
-                <label for="username">Email or phone</label>
-            </div>
-
-            <div class="input-container">
-                <input type="password" id="password" name="password" required>
-                <label for="password">Password</label>
-            </div>
-
-            <a href="#" class="forgot-password">Forgot password?</a>
-
-            <div class="button-container">
-                <a href="/" class="create-account">Create account</a>
-                <button type="submit" class="login-button">Next</button>
-            </div>
-        </form>
-
-        <div class="oauth-section">
-            <p>Or sign in with</p>
-            <div class="oauth-buttons">
-                <a th:href="@{/oauth2/authorization/github}" class="oauth-button github">
-                    <img src="/images/github-mark.png" alt="GitHub">
-                    GitHub
-                </a>
-                <a th:href="@{/oauth2/authorization/google}" class="oauth-button google">
-                    <img src="/images/google-logo.png" alt="Google">
-                    Google
-                </a>
+        <div class="login-cointainer">
+            <div class="oauth-section">
+                <div class="oauth-buttons">
+                    <a th:href="@{/oauth2/authorization/google}" class="oauth-button google">
+                        <img src="/images/google-logo.png" alt="Google">
+                        Google
+                    </a>
+                </div>
             </div>
         </div>
     </div>
+    <footer></footer>
 </body>
 </html>

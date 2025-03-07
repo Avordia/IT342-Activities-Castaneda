@@ -3,15 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <div>
-        <h1>Welcome!</h1>
-        <p>This is the landing page.</p>
-        <button onclick="window.location.href='https://www.youtube.com/shorts/t7e0yoRUxq8'">Click Me! (^-^) <333</button>
-        <button th:onclick="'window.location.href=\'' + @{/user-info} + '\''">User Info</button>
-        <button th:onclick="'window.location.href=\'' + @{/logout} + '\''">Log Out</button>
+    <header>
+    </header>
+    <div class="container-index">
+        <div class="profile-section">
+            <h2>Profile</h2>
+            <div th:if="${user}">
+                <p>Name: <span th:text="${user.name}"></span></p>
+                <p>Email: <span th:text="${user.email}"></span></p>
+            </div>
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/logout}">Log Out</a>
+        </div>
+
+        <div class="contacts-section">
+            <h2>Contacts</h2>
+            <div class="contacts-list">
+                <div class="contact-card" th:each="contact : ${contacts}">
+                    <h2 th:text="${contact.names[0].displayName}">Contact Name</h2>
+                    <p th:if="${contact.emailAddresses}">
+                        <strong>Email:</strong> 
+                        <span th:text="${contact.emailAddresses[0].value}">email@example.com</span>
+                    </p>
+                    <p th:if="${contact.phoneNumbers}">
+                        <strong>Phone:</strong> 
+                        <span th:text="${contact.phoneNumbers[0].value}">+1234567890</span>
+                    </p>
+                    <div class="actions">
+                        <a th:href="@{/contacts/update/{resourceName}(resourceName=${contact.resourceName})}">Edit</a>
+                        <a th:href="@{/contacts/delete/{resourceName}(resourceName=${contact.resourceName})}">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <footer>
+    </footer>
 </body>
 </html>
+

@@ -8,11 +8,9 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <div class="banner">
-        <video data-testid="backdrop-background" autoplay="" class="sc-f3d622cf-0 eOxAvt sc-2ce882a4-0 pvWEU fit-undefined crop-undefined" loop="" playsinline=""><source data-testid="source-video/webm" src="https://cmsassets.rgpub.io/sanity/files/dsfx7636/news/8ab3e227121c53aacab0c9b9f7a48adbc65db520.webm" type="video/webm"></video>
-    </div>
     <div class="container">
         <h1>Google Contacts</h1>
+        <img th:if="${user.picture}" th:src="${user.picture}" alt="Profile Picture" class="profile-picture">
         <div class="contacts-list">
             <div class="contact-card" th:each="contact : ${contacts}">
                 <h2 th:text="${contact.names[0].displayName}">Contact Name</h2>

@@ -55,4 +55,5 @@ public class ContactsController {
         googleContactsService.deleteContact(authorizedClient, resourceName);
         return "redirect:/contacts";
     }
+
 }

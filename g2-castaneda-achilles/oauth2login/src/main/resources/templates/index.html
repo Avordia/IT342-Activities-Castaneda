@@ -13,6 +13,7 @@
         <div class="profile-section">
             <h2>Profile</h2>
             <div th:if="${user}">
+                <img th:if="${user.picture}" th:src="${user.picture}" alt="Profile Picture" class="profile-picture">
                 <p>Name: <span th:text="${user.name}"></span></p>
                 <p>Email: <span th:text="${user.email}"></span></p>
             </div>

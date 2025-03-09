@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -13,7 +15,7 @@
         <div class="profile-section">
             <h2>Profile</h2>
             <div th:if="${user}">
-                <img th:if="${user.picture}" th:src="${user.picture}" alt="Profile Picture" class="profile-picture">
+                <img th:if="${user.picture}" th:src="${user.picture}" alt="Profile Picture" class="profile-picture" referrerpolicy="no-referrer">
                 <p>Name: <span th:text="${user.name}"></span></p>
                 <p>Email: <span th:text="${user.email}"></span></p>
             </div>
@@ -23,6 +25,8 @@
 
         <div class="contacts-section">
             <h2>Contacts</h2>
+            <button onclick="openModal('createModal')" class="add-button">Add New Contact</button>
+            
             <div class="contacts-list">
                 <div class="contact-card" th:each="contact : ${contacts}">
                     <h2 th:text="${contact.names[0].displayName}">Contact Name</h2>
@@ -35,16 +39,56 @@
                         <span th:text="${contact.phoneNumbers[0].value}">+1234567890</span>
                     </p>
                     <div class="actions">
-                        <a th:href="@{/contacts/update/{resourceName}(resourceName=${contact.resourceName})}">Edit</a>
-                        <a th:href="@{/contacts/delete/{resourceName}(resourceName=${contact.resourceName})}">Delete</a>
+                        <button class="edit-button" 
+                                th:attr="data-contact=${contact}"
+                                onclick="openEditModal(this.getAttribute('data-contact'))">Edit</button>
+                        <button class="delete-button" 
+                                th:attr="data-resource-name=${#strings.replace(contact.resourceName, 'people/', '')}"
+                                onclick="deleteContact(this.getAttribute('data-resource-name'))">Delete</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Create Contact Modal -->
+    <div id="createModal" class="modal">
+        <div class="modal-content">
+            <h2>Add New Contact</h2>
+            <form onsubmit="createContact(event)">
+                <input type="text" name="firstName" placeholder="First Name" required>
+                <input type="text" name="lastName" placeholder="Last Name" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="tel" name="phone" placeholder="Phone Number" required>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeModal('createModal')">Cancel</button>
+                    <button type="submit">Add Contact</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Contact Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Contact</h2>
+            <form id="editForm" onsubmit="updateContact(event)">
+                <input type="text" name="firstName" placeholder="First Name" required>
+                <input type="text" name="lastName" placeholder="Last Name" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="tel" name="phone" placeholder="Phone Number" required>
+                <input type="hidden" name="resourceName">
+                <div class="modal-actions">
+                    <button type="button" onclick="closeModal('editModal')">Cancel</button>
+                    <button type="submit">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <footer>
     </footer>
+    
+    <script src="/js/contact.js"></script>
 </body>
 </html>
-

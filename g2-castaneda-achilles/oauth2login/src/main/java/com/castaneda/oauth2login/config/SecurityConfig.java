@@ -7,39 +7,55 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+@EnableWebMvc
+public class SecurityConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/css/**")
+                .addResourceLocations("classpath:/static/css/");
+        registry.addResourceHandler("/js/**")
+                .addResourceLocations("classpath:/static/js/");
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("classpath:/static/images/");
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/css/**", "/images/**", "/logout").permitAll() // Allow access to login, static resources, and logout
-                .anyRequest().authenticated() // All other requests require authentication
+                .requestMatchers("/js/**", "/css/**", "/images/**", "/login", "/logout").permitAll()
+                .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/login") // Custom login page
-                .permitAll() // Allow everyone to access the login page
-                .defaultSuccessUrl("/home", true) // Redirect to /home after successful login
+                .loginPage("/login")
+                .permitAll()
+                .defaultSuccessUrl("/", true)
             )
             .oauth2Login(oauth -> oauth
-                .loginPage("/login") // Use the same login page for OAuth2 login
+                .loginPage("/login")
             )
             .logout(logout -> logout
-                .logoutUrl("/logout") // Logout URL
-                .logoutSuccessUrl("/login") // Redirect to login page after logout
-                .invalidateHttpSession(true) // Invalidate the session
-                .clearAuthentication(true) // Clear the authentication
-                .addLogoutHandler(logoutHandler()) // Optional: Add a custom logout handler
-                .permitAll() // Allow everyone to access the logout endpoint
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .addLogoutHandler(logoutHandler())
+                .permitAll()
+            )
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/contacts/**", "/js/**", "/css/**", "/images/**")
             );
 
         return http.build();
     }
 
-    // Optional: Custom logout handler
     @Bean
     public LogoutHandler logoutHandler() {
         return new SecurityContextLogoutHandler();

@@ -2,6 +2,10 @@ package com.castaneda.oauth2login.controller;
 
 import com.castaneda.oauth2login.service.GoogleContactsService;
 import com.google.api.services.people.v1.model.Person;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
@@ -31,29 +35,41 @@ public class ContactsController {
         List<Person> contacts = googleContactsService.getContacts(authorizedClient);
         model.addAttribute("contacts", contacts);
         model.addAttribute("user", oauth2User.getAttributes());
-        return "contacts";
+        return "index";
     }
 
     @PostMapping("/create")
-    public String createContact(@RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient authorizedClient,
-                               @ModelAttribute Person contact) throws GeneralSecurityException, IOException {
-        googleContactsService.createContact(authorizedClient, contact);
-        return "redirect:/contacts";
+    @ResponseBody
+    public ResponseEntity<Person> createContact(
+            @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient authorizedClient,
+            @RequestBody Person contact) throws GeneralSecurityException, IOException {
+        Person createdContact = googleContactsService.createContact(authorizedClient, contact);
+        return ResponseEntity.ok(createdContact);
     }
 
-    @PostMapping("/update/{resourceName}")
-    public String updateContact(@RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient authorizedClient,
-                               @PathVariable String resourceName,
-                               @ModelAttribute Person contact) throws GeneralSecurityException, IOException {
-        googleContactsService.updateContact(authorizedClient, resourceName, contact);
-        return "redirect:/contacts";
+    @PutMapping("/{resourceName}")
+    @ResponseBody
+    public ResponseEntity<Person> updateContact(
+            @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient authorizedClient,
+            @PathVariable String resourceName,
+            @RequestBody Person contact) throws GeneralSecurityException, IOException {
+        if (!resourceName.startsWith("people/")) {
+            resourceName = "people/" + resourceName;
+        }
+        Person updatedContact = googleContactsService.updateContact(authorizedClient, resourceName, contact);
+        return ResponseEntity.ok(updatedContact);
     }
 
-    @PostMapping("/delete/{resourceName}")
-    public String deleteContact(@RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient authorizedClient,
-                               @PathVariable String resourceName) throws GeneralSecurityException, IOException {
+    @DeleteMapping("/{resourceName}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteContact(
+            @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient authorizedClient,
+            @PathVariable String resourceName) throws GeneralSecurityException, IOException {
+        // Add "people/" prefix if it's missing
+        if (!resourceName.startsWith("people/")) {
+            resourceName = "people/" + resourceName;
+        }
         googleContactsService.deleteContact(authorizedClient, resourceName);
-        return "redirect:/contacts";
+        return ResponseEntity.ok().build();
     }
-
 }

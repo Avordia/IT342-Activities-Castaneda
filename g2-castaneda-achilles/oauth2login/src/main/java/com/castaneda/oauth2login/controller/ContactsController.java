@@ -5,6 +5,7 @@ import com.google.api.services.people.v1.model.Person;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -30,11 +32,9 @@ public class ContactsController {
 
     @GetMapping
     public String getContacts(@RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient authorizedClient,
-                             @AuthenticationPrincipal OAuth2User oauth2User,
                              Model model) throws GeneralSecurityException, IOException {
         List<Person> contacts = googleContactsService.getContacts(authorizedClient);
         model.addAttribute("contacts", contacts);
-        model.addAttribute("user", oauth2User.getAttributes());
         return "index";
     }
 
@@ -49,13 +49,14 @@ public class ContactsController {
 
     @PutMapping("/{resourceName}")
     @ResponseBody
-    public ResponseEntity<Person> updateContact(
+    public ResponseEntity<?> updateContact(
             @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient authorizedClient,
             @PathVariable String resourceName,
             @RequestBody Person contact) throws GeneralSecurityException, IOException {
         if (!resourceName.startsWith("people/")) {
             resourceName = "people/" + resourceName;
         }
+        contact.setResourceName(resourceName);
         Person updatedContact = googleContactsService.updateContact(authorizedClient, resourceName, contact);
         return ResponseEntity.ok(updatedContact);
     }
@@ -65,7 +66,6 @@ public class ContactsController {
     public ResponseEntity<Void> deleteContact(
             @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient authorizedClient,
             @PathVariable String resourceName) throws GeneralSecurityException, IOException {
-        // Add "people/" prefix if it's missing
         if (!resourceName.startsWith("people/")) {
             resourceName = "people/" + resourceName;
         }

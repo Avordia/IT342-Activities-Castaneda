@@ -122,14 +122,9 @@ function openEditModal(contact) {
 }
 
 function handleEdit(button) {
-    try {
-        const contactData = button.getAttribute('data-contact');
-        const contact = JSON.parse(decodeURIComponent(contactData));
-        openEditModal(contact);
-    } catch (error) {
-        console.error('Error parsing contact data:', error);
-        alert('Error opening edit form');
-    }
+    const contactData = button.getAttribute('data-contact');
+    const contact = JSON.parse(contactData);
+    openEditModal(contact);
 }
 
 function handleEditSubmit(event) {
@@ -138,9 +133,11 @@ function handleEditSubmit(event) {
     const resourceName = form.resourceName.value;
     
     const contact = {
+        etag: '*',
         names: [{
             givenName: form.firstName.value,
-            familyName: form.lastName.value
+            familyName: form.lastName.value,
+            displayName: `${form.firstName.value} ${form.lastName.value}`
         }],
         emailAddresses: [{
             value: form.email.value
@@ -150,11 +147,7 @@ function handleEditSubmit(event) {
         }]
     };
 
-    // Add people/ prefix if missing
-    const fullResourceName = resourceName.startsWith('people/') ? 
-        resourceName : `people/${resourceName}`;
-
-    fetch(`/contacts/${encodeURIComponent(fullResourceName)}`, {
+    fetch(`/contacts/${encodeURIComponent(resourceName)}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -164,10 +157,11 @@ function handleEditSubmit(event) {
     })
     .then(response => {
         if (response.ok) {
+            alert('Contact updated successfully!');
             closeModal('editModal');
             window.location.reload();
         } else {
-            throw new Error('Failed to update contact');
+            return response.text().then(text => { throw new Error(text); });
         }
     })
     .catch(error => {

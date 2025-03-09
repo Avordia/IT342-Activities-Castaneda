@@ -1,34 +1,14 @@
 # MIDTERM EXAMINATION
 
-Link: https://drive.google.com/drive/folders/1RH8HYM7zKkw3sDrRxsG6fX8X2bH2X_Tn?usp=drive_link
+Iteration 1: https://cebuinstituteoftechnology-my.sharepoint.com/personal/achillesnino_castaneda_cit_edu/Documents/Recordings/Iteration%201-20250310_000502-Meeting%20Recording.mp4?web=1&referrer=Teams.TEAMS-ELECTRON&referrerScenario=RecapOpenInStreamButton.view.983ba428-e97d-443c-9db6-40602b98cde2
 
-Objective:
-The goal of this activity is to integrate the Google Contacts (People) API into a Spring Boot application with a Thymeleaf-based user interface. Students will learn how to authenticate with Google, retrieve contact lists, and perform CRUD (Create, Read, Update, Delete) operations on Google Contacts.
+Documentation:
 
-Instructions:
-Set Up Google API Credentials
+@EnableWebSecurity
+@EnableWebMvc
 
-Create a Google Cloud project and enable the People API.
-Generate OAuth 2.0 credentials (Client ID and Secret) for authentication.
-Configure the OAuth consent screen and add required scopes.
-Backend Development (Spring Boot)
+I enabled this to allow the Springboot Application make use of the PUT and DELETE mapping. I made use of Javascript since html only uses GET and POST request. I want to use the modern way of using API (which includes taking advantage of PUT and DELETE and not just GET and POST).
 
-Implement authentication using OAuth 2.0.
-Develop REST endpoints for:
-Retrieving all contacts from the authenticated user's Google Contacts.
-Adding a new contact.
-Modifying/editing an existing contact.
-Removing a contact.
-Frontend Development (Thymeleaf UI)
+The main challenge was debugging ESPECUALLY THE PUT. AI Tools are usually not helpful because sometimes they just ruin your code to oblivion. Sometimes, the AI just gives me another problem. I've been stuck on the PUT that I felt like giving up especially with the fact that the AI just made it worse for me. It just multiplied my problem. It's really important to commit and sync first your code when some of the features are working now just in case that when you ask AI for help in debugging, you can restart to where it used to work well. I had to fix a lot of problems that the AI has caused me that I had to read a lot of documentaries.
 
-Create a user-friendly interface to display contacts.
-Provide form-based input for adding and editing contacts.
-Implement buttons for updating and deleting contacts.
-Testing and Deployment
-
-Run the application and ensure authentication works.
-Test all CRUD operations using the web interface.
-Debug and handle errors related to API requests and authentication.
-Expected Output:
-A functional web application that integrates with Google Contacts.
-Users can view, add, edit, and delete their Google Contacts from the application.
+Another problem is dealing with versions with Maven. Maven is also a challenge of itself. I hate Maven. Compared to Gradle, Maven just feel so hectic to deal with the dependencies. It's too unncesserarily wordy.

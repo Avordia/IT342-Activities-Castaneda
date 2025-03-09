@@ -51,10 +51,12 @@ public class GoogleContactsService {
                 .execute();
     }
 
-    public Person updateContact(OAuth2AuthorizedClient authorizedClient, String resourceName, Person contact) throws GeneralSecurityException, IOException {
+    public Person updateContact(OAuth2AuthorizedClient authorizedClient, String resourceName, Person contact) 
+        throws GeneralSecurityException, IOException {
         PeopleService peopleService = getPeopleService(authorizedClient);
-
-        return peopleService.people().updateContact(resourceName, contact)
+        
+        return peopleService.people()
+                .updateContact(resourceName, contact)
                 .setUpdatePersonFields("names,emailAddresses,phoneNumbers")
                 .execute();
     }

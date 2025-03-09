@@ -19,8 +19,6 @@
                 <p>Name: <span th:text="${user.name}"></span></p>
                 <p>Email: <span th:text="${user.email}"></span></p>
             </div>
-            <a th:href="@{/}">Home</a>
-            <a th:href="@{/logout}">Log Out</a>
         </div>
 
         <div class="contacts-section">
@@ -31,7 +29,6 @@
                 <div class="contact-card" th:each="contact : ${contacts}">
                     <h2 th:text="${contact.names[0].displayName}">Contact Name</h2>
                     <p th:if="${contact.emailAddresses}">
-                        <strong>Email:</strong> 
                         <span th:text="${contact.emailAddresses[0].value}">email@example.com</span>
                     </p>
                     <p th:if="${contact.phoneNumbers}">
@@ -40,8 +37,8 @@
                     </p>
                     <div class="actions">
                         <button class="edit-button" 
-                                th:attr="data-contact=${contact}"
-                                onclick="openEditModal(this.getAttribute('data-contact'))">Edit</button>
+                                th:attr="data-contact=${#strings.escapeJavaScript(contact.toString())}"
+                                onclick="handleEdit(this)">Edit</button>
                         <button class="delete-button" 
                                 th:attr="data-resource-name=${#strings.replace(contact.resourceName, 'people/', '')}"
                                 onclick="deleteContact(this.getAttribute('data-resource-name'))">Delete</button>
@@ -72,7 +69,7 @@
     <div id="editModal" class="modal">
         <div class="modal-content">
             <h2>Edit Contact</h2>
-            <form id="editForm" onsubmit="updateContact(event)">
+            <form id="editForm" onsubmit="handleEditSubmit(event)">
                 <input type="text" name="firstName" placeholder="First Name" required>
                 <input type="text" name="lastName" placeholder="Last Name" required>
                 <input type="email" name="email" placeholder="Email" required>
@@ -87,6 +84,7 @@
     </div>
 
     <footer>
+        <a th:href="@{/logout}" class="logout-button">Log Out</a>
     </footer>
     
     <script src="/js/contact.js"></script>
